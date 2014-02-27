@@ -10,10 +10,10 @@
         var testData = {
             max: 46,
             data: [
-                {lat: 33.5363, lng: -117.044, count: 50},
+                {lat: 33.5363, lng: -110.044, count: 50},
                 {lat: 33.5608, lng: -117.24, count: 120},
                 {lat: 38, lng: -97, count: 11},
-                {lat: 38.9358, lng: -77.1621, count: 50}
+                {lat: 38.9358, lng: -77.1621, count: 350}
             ]
         };
 
@@ -37,7 +37,6 @@
 
         map.zoomToMaxExtent();
         heatmap.setDataSet(transformedTestData);
-        alert("Ok");
     };
 </script>
 </html>
