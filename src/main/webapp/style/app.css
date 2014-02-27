@@ -1,0 +1,12 @@
+.inputArea {
+    float: left;
+    width: 25%;
+    display: inline-block;
+}
+
+.heatmapArea {
+    width: 75%;
+    padding-left:20px;
+    height: 800px;
+    display: inline-block;
+}
