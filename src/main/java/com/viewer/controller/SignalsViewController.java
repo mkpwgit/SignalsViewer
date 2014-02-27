@@ -25,15 +25,12 @@ public class SignalsViewController {
 
     @RequestMapping(value = "/file", method = RequestMethod.POST)
     public String uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
-
         if (!file.isEmpty()) {
             List rows = IOUtils.readLines(file.getInputStream(), "UTF-8");
             for (Object row: rows) {
                 System.out.println(row);
             }
-
         }
-
         return "test2";
     }
 
