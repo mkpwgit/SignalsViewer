@@ -31,7 +31,7 @@ public class SignalsViewController {
                 System.out.println(row);
             }
         }
-        return "test2";
+        return "test6";
     }
 
 }
