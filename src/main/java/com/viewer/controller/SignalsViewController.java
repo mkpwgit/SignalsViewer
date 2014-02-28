@@ -53,6 +53,7 @@ public class SignalsViewController {
         signal.setDate(startDate);
         signal.setLatitude(12.34);
         signal.setLongitude(15.67);
+        signal.setStrength(-40);
 
         signals.add(signal);
         signals.add(signal);

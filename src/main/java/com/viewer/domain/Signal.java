@@ -1,8 +1,5 @@
 package com.viewer.domain;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import java.util.Date;
 
 /**
@@ -14,6 +11,7 @@ public class Signal {
     private Date date;
     private Double latitude;
     private Double longitude;
+    private Integer strength;
 
     public Long getDeviceId() {
         return deviceId;
@@ -45,5 +43,13 @@ public class Signal {
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+
+    public Integer getStrength() {
+        return strength;
+    }
+
+    public void setStrength(Integer strength) {
+        this.strength = strength;
     }
 }

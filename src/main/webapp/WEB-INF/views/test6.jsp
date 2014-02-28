@@ -17,6 +17,40 @@
             });
         });
 
+        var map;
+        var baseLayer;
+        var currentHeatmap;
+
+
+        function init() {
+            map = new OpenLayers.Map('heatmapArea');
+            baseLayer = new OpenLayers.Layer.OSM();
+            map.addLayer(baseLayer);
+            map.zoomToMaxExtent();
+        };
+
+        function addHeatMapLayer(signals) {
+            if (currentHeatmap != null) {
+                map.removeLayer(currentHeatmap);
+            }
+
+            var transformedTestData = { max: 90, data: [] }, nudata = [];
+
+            for (var i=0; i<signals.length; i++) {
+                nudata.push({
+                    lonlat: new OpenLayers.LonLat(signals[i].longitude, signals[i].latitude),
+                    count: signals[i].strength+120
+                });
+            }
+            transformedTestData.data = nudata;
+
+            currentHeatmap = new OpenLayers.Layer.Heatmap("Heatmap Layer", map, baseLayer, {visible: true, radius: 30}, {isBaseLayer: false, opacity: 0.3, projection: new OpenLayers.Projection("EPSG:4326")});
+
+            map.addLayer(currentHeatmap);
+
+            currentHeatmap.setDataSet(transformedTestData);
+        }
+
         $(function () {
             var siteUrl = "http://localhost:8080/signalsviewer/";
 
@@ -31,52 +65,20 @@
                     dataType: "json",
                     success: function (signals) {
                         signals.forEach(print);
+                        addHeatMapLayer(signals);
                     }
                 });
 
                 function print(signal) {
                     alert("Device id: " + signal.deviceId +
-                            " Latitude: "+signal.latitude + " Longitude: "+signal.longitude)
+                            " Latitude: " + signal.latitude + " Longitude: " + signal.longitude);
                 }
-            })
+
+            });
+
+
         });
 
-    </script>
-    <script type="text/javascript">
-        function init() {
-
-            var testData = {
-                max: 46,
-                data: [
-                    {lat: 33.5363, lng: -110.044, count: 50},
-                    {lat: 33.5608, lng: -117.24, count: 120},
-                    {lat: 38, lng: -97, count: 11},
-                    {lat: 38.9358, lng: -77.1621, count: 1350}
-                ]
-            };
-
-            var transformedTestData = { max: testData.max, data: [] },
-                    data = testData.data,
-                    datalen = data.length,
-                    nudata = [];
-
-            while (datalen--) {
-                nudata.push({
-                    lonlat: new OpenLayers.LonLat(data[datalen].lng, data[datalen].lat),
-                    count: data[datalen].count
-                });
-            }
-            transformedTestData.data = nudata;
-            var map = new OpenLayers.Map('heatmapArea');
-            var layer = new OpenLayers.Layer.OSM();
-            // create our heatmap layer
-            var heatmap = new OpenLayers.Layer.Heatmap("Heatmap Layer", map, layer, {visible: true, radius: 30}, {isBaseLayer: false, opacity: 0.3, projection: new OpenLayers.Projection("EPSG:4326")});
-            map.addLayers([layer, heatmap]);
-
-            map.zoomToMaxExtent();
-            heatmap.setDataSet(transformedTestData);
-        }
-        ;
     </script>
 </head>
 <body onload='init();'>
