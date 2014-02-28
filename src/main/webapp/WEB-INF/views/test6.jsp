@@ -44,7 +44,9 @@
                 });
             }
 
-            currentHeatmap = new OpenLayers.Layer.Heatmap("Heatmap Layer", map, baseLayer, {visible: true, radius: 30}, {isBaseLayer: false, opacity: 0.3, projection: new OpenLayers.Projection("EPSG:4326")});
+            //add new heatmap layer to map
+            currentHeatmap = new OpenLayers.Layer.Heatmap("Heatmap Layer", map, baseLayer, {visible: true, radius: 30},
+                    {isBaseLayer: false, opacity: 0.3, projection: new OpenLayers.Projection("EPSG:4326")});
             map.addLayer(currentHeatmap);
             currentHeatmap.setDataSet(heatMapDataSet);
         }

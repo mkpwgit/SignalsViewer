@@ -6,8 +6,9 @@ http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
     <!-- The definition of the Root Spring Container shared by all Servlets and Filters -->
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>/WEB-INF/spring/root-context.xml</param-value>
+        <param-value>/com//rup/rest/integration/configuration/spring/main-context.xml</param-value>
     </context-param>
+    classpath*:/com/copyright/rup/rest/integration/configuration/spring/main-context.xml
     <!-- Spring MVC filters -->
     <!--<filter>-->
         <!--<filter-name>CharacterEncodingFilter</filter-name>-->
