@@ -52,4 +52,15 @@ public class Signal {
     public void setStrength(Integer strength) {
         this.strength = strength;
     }
+
+    @Override
+    public String toString() {
+        return "Signal{" +
+                "deviceId=" + deviceId +
+                ", date=" + date +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", strength=" + strength +
+                '}';
+    }
 }

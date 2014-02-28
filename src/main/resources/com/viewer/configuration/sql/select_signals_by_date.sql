@@ -1,8 +1,8 @@
 SELECT
-  device_id AS deviceId,
+  device_id,
   date,
   latitude,
   longitude,
   strength
 FROM signal_t
-WHERE date > :startDate and date < :endDate;
+WHERE date >= :startDate and date <= :endDate;

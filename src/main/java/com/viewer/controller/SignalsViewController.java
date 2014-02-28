@@ -50,7 +50,7 @@ public class SignalsViewController {
         List<Signal> signals = new ArrayList<>();
         Signal signal = new Signal();
         signal.setDeviceId(1L);
-        signal.setDate(startDate);
+//        signal.setDate(startDate);
         signal.setLatitude(12.34);
         signal.setLongitude(15.67);
         signal.setStrength(-40);

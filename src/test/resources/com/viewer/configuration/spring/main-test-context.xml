@@ -11,14 +11,14 @@
     <bean id="placeholderProperties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">
             <list>
-                <value>classpath:/com/viewer/configuration/properties/application-web.properties</value>
+                <value>classpath:/com/viewer/configuration/properties/application-test.properties</value>
                 <value>classpath:/com/viewer/configuration/properties/application-sql.properties</value>
             </list>
         </property>
     </bean>
 
     <!--common config-->
-    <import resource="classpath*:/com/viewer/configuration/spring/data-source-context-web.xml"/>
+    <import resource="classpath*:/com/viewer/configuration/spring/data-source-context-test.xml"/>
     <context:component-scan base-package="com.viewer"/>
 
 </beans>

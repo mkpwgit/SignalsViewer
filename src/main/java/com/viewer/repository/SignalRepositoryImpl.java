@@ -2,10 +2,10 @@ package com.viewer.repository;
 
 import com.viewer.domain.Signal;
 import com.viewer.exception.ViewerException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
@@ -14,7 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.viewer.Constants.*;
 
@@ -24,10 +27,12 @@ import static com.viewer.Constants.*;
 @Repository
 public class SignalRepositoryImpl implements SignalRepository {
 
-    //TODO log should be done
+    private static Logger LOG = LoggerFactory.getLogger(SignalRepositoryImpl.class);
 
-    @Value("#{T(org.apache.commons.io.FileUtils).readFileToString((new org.springframework.core.io.ClassPathResource('${select_user_by_id.sql}')).file)}")
+    @Value("#{T(org.apache.commons.io.FileUtils).readFileToString((new org.springframework.core.io.ClassPathResource('${select_signals_by_date.sql}')).file)}")
     private String findSignalsByDateQuery;
+    @Value("#{T(org.apache.commons.io.FileUtils).readFileToString((new org.springframework.core.io.ClassPathResource('${select_signals_by_date_and_device_id.sql}')).file)}")
+    private String findSignalsByDateAndDeviceIdQuery;
 
     /**
      * Allowing the use of named parameters rather than traditional '?' placeholders.
@@ -62,7 +67,12 @@ public class SignalRepositoryImpl implements SignalRepository {
         parameters.put(LONGITUDE_COLUMN, signal.getLongitude());
         parameters.put(STRENGTH_COLUMN, signal.getStrength());
 
-        jdbcInsert.execute(parameters);
+        try {
+            jdbcInsert.execute(parameters);
+        } catch (Exception ex) {
+            LOG.error("ERROR: ", ex);
+            throw new ViewerException("Cannot save signal in db!");
+        }
     }
 
     @Override
@@ -73,16 +83,26 @@ public class SignalRepositoryImpl implements SignalRepository {
 
         try {
             final List<Signal> signals = namedParameterJdbcTemplate.query(findSignalsByDateQuery, parameters, new BeanPropertyRowMapper<>(Signal.class));
-            return signals != null ? signals : Collections.<Signal>emptyList();
-        } catch (DataAccessException e) {
-            new ViewerException(e.getLocalizedMessage());
+            return signals;
+        } catch (Exception ex) {
+            LOG.error("ERROR: ", ex);
+            throw new ViewerException("Cannot get signals from db!");
         }
-
-        return null;
     }
 
     @Override
-    public List<Signal> getSignalsByDateAndDeviceId(Date startDate, Date endDate) {
-        return null;
+    public List<Signal> getSignalsByDateAndDeviceId(Date startDate, Date endDate, Long deviceId) {
+        Map<String, Object> parameters = new HashMap<>(3);
+        parameters.put(START_DATE, startDate);
+        parameters.put(END_DATE, endDate);
+        parameters.put(DEVICE_ID, deviceId);
+
+        try {
+            final List<Signal> signals = namedParameterJdbcTemplate.query(findSignalsByDateAndDeviceIdQuery, parameters, new BeanPropertyRowMapper<>(Signal.class));
+            return signals;
+        } catch (Exception ex) {
+            LOG.error("ERROR: ", ex);
+            throw new ViewerException("Cannot get signals from db!");
+        }
     }
 }

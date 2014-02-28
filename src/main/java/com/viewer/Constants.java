@@ -16,4 +16,7 @@ public class Constants {
 
     public static final String START_DATE = "startDate";
     public static final String END_DATE = "endDate";
+    public static final String DEVICE_ID = "deviceId";
+
+    public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
 }
