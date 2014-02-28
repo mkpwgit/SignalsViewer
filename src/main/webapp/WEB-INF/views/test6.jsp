@@ -30,25 +30,23 @@
         };
 
         function addHeatMapLayer(signals) {
+            //remove old heatmap layer
             if (currentHeatmap != null) {
                 map.removeLayer(currentHeatmap);
             }
 
-            var transformedTestData = { max: 90, data: [] }, nudata = [];
-
+            //create data set
+            var heatMapDataSet = { max: 90, data: [] };
             for (var i=0; i<signals.length; i++) {
-                nudata.push({
+                heatMapDataSet.data.push({
                     lonlat: new OpenLayers.LonLat(signals[i].longitude, signals[i].latitude),
                     count: signals[i].strength+120
                 });
             }
-            transformedTestData.data = nudata;
 
             currentHeatmap = new OpenLayers.Layer.Heatmap("Heatmap Layer", map, baseLayer, {visible: true, radius: 30}, {isBaseLayer: false, opacity: 0.3, projection: new OpenLayers.Projection("EPSG:4326")});
-
             map.addLayer(currentHeatmap);
-
-            currentHeatmap.setDataSet(transformedTestData);
+            currentHeatmap.setDataSet(heatMapDataSet);
         }
 
         $(function () {
@@ -64,18 +62,11 @@
                     url: resultUrl,
                     dataType: "json",
                     success: function (signals) {
-                        signals.forEach(print);
                         addHeatMapLayer(signals);
                     }
                 });
 
-                function print(signal) {
-                    alert("Device id: " + signal.deviceId +
-                            " Latitude: " + signal.latitude + " Longitude: " + signal.longitude);
-                }
-
             });
-
 
         });
 
