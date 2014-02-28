@@ -10,12 +10,37 @@
     <script type="text/javascript" src="/resources/js/jquery/jquery-2.1.0.js"></script>
     <script type="text/javascript" src="/resources/js/jquery/jquery-ui-1.10.4.custom.min.js"></script>
     <script type="text/javascript">
-        $(function() {
-            $('#date').datepicker({
-                dateFormat : 'yy-mm-dd',
-                changeYear : true
+        $(function () {
+            $('.dateChooser').datepicker({
+                dateFormat: 'yy-mm-dd',
+                changeYear: true
             });
         });
+
+        $(function () {
+            var siteUrl = "http://localhost:8080/signalsviewer/";
+
+            $('#findButton').click(function () {
+                var startDate = $("#startdate").val();
+                var endDate = $("#enddate").val();
+                var resultUrl = siteUrl + startDate + "/" + endDate;
+
+                $.ajax({
+                    type: "GET",
+                    url: resultUrl,
+                    dataType: "json",
+                    success: function (signals) {
+                        signals.forEach(print);
+                    }
+                });
+
+                function print(signal) {
+                    alert("Device id: " + signal.deviceId +
+                            " Latitude: "+signal.latitude + " Longitude: "+signal.longitude)
+                }
+            })
+        });
+
     </script>
     <script type="text/javascript">
         function init() {
@@ -56,7 +81,15 @@
 </head>
 <body onload='init();'>
 <div class="inputArea">
-    <input type="text" id="date" name="name"/>
+    <label>Start date:</label>
+    <input type="text" class="dateChooser" id="startdate"/>
+
+    <p/>
+    <label>End date:</label>
+    <input type="text" class="dateChooser" id="enddate"/>
+
+    <p/>
+    <input type="button" id="findButton" value="Find"/>
 </div>
 <div id="heatmapArea" class="heatmapArea"></div>
 </body>

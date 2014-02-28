@@ -1,14 +1,18 @@
 package com.viewer.controller;
 
+import com.viewer.domain.Signal;
 import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,6 +36,28 @@ public class SignalsViewController {
             }
         }
         return "test6";
+    }
+
+    @RequestMapping(value = "/{startdate:.+}/{enddate:.+}", method = RequestMethod.GET)
+    public @ResponseBody
+    List<Signal> getSignalsForAllIds(@PathVariable String startdate, @PathVariable String enddate) throws ParseException {
+        System.out.println(startdate+" "+enddate);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        Date startDate = dateFormat.parse(startdate);
+        Date endDate = dateFormat.parse(enddate);
+        System.out.println(startDate + " !!! "+endDate);
+
+        List<Signal> signals = new ArrayList<>();
+        Signal signal = new Signal();
+        signal.setDeviceId(1L);
+        signal.setDate(startDate);
+        signal.setLatitude(12.34);
+        signal.setLongitude(15.67);
+
+        signals.add(signal);
+        signals.add(signal);
+
+        return signals;
     }
 
 }
