@@ -55,6 +55,7 @@
                         url: resultUrl,
                         dataType: "json",
                         success: function (signals) {
+                            $("#signalsTotalNumber").text(signals.length);
                             addHeatMapLayer(signals);
                         }
                     });
@@ -160,6 +161,9 @@
     <div class="error" id="deviceIdError">Invalid number</div>
 
     <input type="button" id="findButton" value="Find"/>
+
+    <label class="statistic">Total number of received signals: </label>
+    <label class="statistic" id="signalsTotalNumber"></label>
 </div>
 
 <div id="heatmapArea" class="heatmapArea"></div>
