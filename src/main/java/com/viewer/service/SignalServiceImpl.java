@@ -62,6 +62,13 @@ public class SignalServiceImpl implements SignalService {
         return signalRepository.getSignalsByDate(startDate, endDate);
     }
 
+    @Override
+    public List<Signal> getSignalsByDateAndDevice(Long deviceId, String startDateStr, String endDateStr) {
+        Date startDate = parseDateFromString(startDateStr);
+        Date endDate = parseDateFromString(endDateStr);
+        return signalRepository.getSignalsByDateAndDevice(deviceId, startDate, endDate);
+    }
+
     private Date parseDateFromString(String date) {
         try {
             DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);

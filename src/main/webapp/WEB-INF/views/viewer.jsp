@@ -12,7 +12,8 @@
     <script type="text/javascript" src="/resources/js/jquery/jquery.ui.timepicker.js"></script>
     <script type="text/javascript" src="/resources/js/jquery/jquery-ui-1.10.4.custom.min.js"></script>
     <script type="text/javascript">
-        var isErrorOccured = false;
+
+        var isErrorOccurred = false;
 
         $(document).ready(function () {
             $('.error').hide();
@@ -21,22 +22,33 @@
             var timeRegExp = /^\d\d\:\d\d$/;
 
             $('#findButton').click(function (event) {
-                isErrorOccured = false;
+                isErrorOccurred = false;
+
                 var startDate = $("#startdate").val();
                 var startTime = $("#starttime").val();
                 var endDate = $("#enddate").val();
                 var endTime = $("#endtime").val();
+                var deviceId = $("#deviceId").val();
 
                 validateField(startDate, dateRegExp, '#startDateId');
                 validateField(startTime, timeRegExp, '#startTimeId');
                 validateField(endDate, dateRegExp, '#endDateId');
                 validateField(endTime, timeRegExp, '#endTimeId');
+                if (deviceId != "")
+                    validateNumber(deviceId, "#deviceIdError");
 
-                if (!isErrorOccured) {
+                if (!isErrorOccurred) {
                     var siteUrl = "/signalsviewer/";
                     var timeEnding = ":00";
-                    var resultUrl = siteUrl + startDate + "T" + startTime + timeEnding + "/" +
-                            endDate + "T" + endTime + timeEnding;
+
+                    var resultUrl = "";
+                    if (deviceId == "") {
+                        resultUrl = siteUrl + startDate + "T" + startTime + timeEnding + "/" +
+                                endDate + "T" + endTime + timeEnding;
+                    } else {
+                        resultUrl = siteUrl + deviceId + "/" + startDate + "T" + startTime + timeEnding + "/" +
+                                endDate + "T" + endTime + timeEnding;
+                    }
 
                     $.ajax({
                         type: "GET",
@@ -50,13 +62,22 @@
             });
         });
 
+        function validateNumber(value, fieldId) {
+            if ($.isNumeric(value)) {
+                $(fieldId).hide();
+            } else {
+                $(fieldId).show();
+                isErrorOccurred = true;
+            }
+        }
+
         function validateField(value, regExp, fieldId) {
             if (validateWithReg(value, regExp)) {
                 $(fieldId).hide();
             }
             else {
                 $(fieldId).show();
-                isErrorOccured = true;
+                isErrorOccurred = true;
             }
         }
 
@@ -100,7 +121,7 @@
             for (var i = 0; i < signals.length; i++) {
                 heatMapDataSet.data.push({
                     lonlat: new OpenLayers.LonLat(signals[i].longitude, signals[i].latitude),
-                    count: signals[i].strength + 120
+                    count: signals[i].strength + 121
                 });
             }
 
@@ -112,6 +133,7 @@
         }
 
     </script>
+    <title>Viewer</title>
 </head>
 <body onload='init();'>
 <div class="inputArea">
@@ -119,26 +141,23 @@
 
     <label>Start date*:</label>
     <input type="text" class="dateChooser" id="startdate"/>
-
     <div class="error" id="startDateId">Invalid date</div>
 
     <label>Start time*:</label>
     <input type="text" class="timeChooser" id="starttime">
-
     <div class="error" id="startTimeId">Invalid time</div>
 
     <label>End date*:</label>
     <input type="text" class="dateChooser" id="enddate"/>
-
     <div class="error" id="endDateId">Invalid date</div>
 
     <label>End time*:</label>
     <input type="text" class="timeChooser" id="endtime">
-
     <div class="error" id="endTimeId">Invalid time</div>
 
     <label>Device id:</label>
     <input type="text" class="deviceChooser" id="deviceId">
+    <div class="error" id="deviceIdError">Invalid number</div>
 
     <input type="button" id="findButton" value="Find"/>
 </div>

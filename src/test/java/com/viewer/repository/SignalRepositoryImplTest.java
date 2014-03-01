@@ -77,7 +77,7 @@ public class SignalRepositoryImplTest {
 
     @Test
     public void getSignalsByDateAndDeviceIdTest() {
-        List<Signal> signals = signalRepository.getSignalsByDateAndDeviceId(startDate, endDate, deviceId);
+        List<Signal> signals = signalRepository.getSignalsByDateAndDevice(deviceId, startDate, endDate);
 
         assertEquals(1, signals.size());
 

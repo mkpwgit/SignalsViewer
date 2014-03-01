@@ -1,6 +1,7 @@
 package com.viewer.controller;
 
 import com.viewer.domain.Signal;
+import com.viewer.exception.ViewerException;
 import com.viewer.service.SignalService;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -44,15 +45,24 @@ public class SignalsViewController {
 
     @RequestMapping(value = "/{startdate:.+}/{enddate:.+}", method = RequestMethod.GET)
     public @ResponseBody
-    List<Signal> getSignalsForAllIds(@PathVariable String startdate, @PathVariable String enddate) throws ParseException {
-        /*DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
-        Date startDate = dateFormat.parse(startdate);
-        Date endDate = dateFormat.parse(enddate);
-        LOG.info("Start date: "+startDate+" End date: "+endDate);*/
-
+    List<Signal> getSignalsForAllDevices(@PathVariable String startdate, @PathVariable String enddate) throws ParseException {
         List<Signal> signals = signalService.getSignalsByDate(startdate, enddate);
-
         return signals;
+    }
+
+    @RequestMapping(value = "/{deviceid}/{startdate:.+}/{enddate:.+}", method = RequestMethod.GET)
+    public @ResponseBody
+    List<Signal> getSignalsForOneDevice(@PathVariable Long deviceid, @PathVariable String startdate,
+                                        @PathVariable String enddate) {
+        List<Signal> signals = signalService.getSignalsByDateAndDevice(deviceid, startdate, enddate);
+        return signals;
+
+    }
+
+    @ExceptionHandler(ViewerException.class)
+    public String viewerErrorHandler(ViewerException ex) {
+        LOG.error("ERROR: ", ex);
+        return "errorPage";
     }
 
 }

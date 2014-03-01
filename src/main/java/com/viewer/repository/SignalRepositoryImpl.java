@@ -91,7 +91,7 @@ public class SignalRepositoryImpl implements SignalRepository {
     }
 
     @Override
-    public List<Signal> getSignalsByDateAndDeviceId(Date startDate, Date endDate, Long deviceId) {
+    public List<Signal> getSignalsByDateAndDevice(Long deviceId, Date startDate, Date endDate) {
         Map<String, Object> parameters = new HashMap<>(3);
         parameters.put(START_DATE, startDate);
         parameters.put(END_DATE, endDate);

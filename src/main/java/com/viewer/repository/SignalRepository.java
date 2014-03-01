@@ -14,5 +14,5 @@ public interface SignalRepository {
 
     public List<Signal> getSignalsByDate(Date startDate, Date endDate);
 
-    public List<Signal> getSignalsByDateAndDeviceId(Date startDate, Date endDate, Long deviceId);
+    public List<Signal> getSignalsByDateAndDevice(Long deviceId, Date startDate, Date endDate);
 }
