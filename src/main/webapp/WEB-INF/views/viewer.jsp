@@ -3,11 +3,13 @@
 <head>
     <link rel="stylesheet" type="text/css" href="/resources/style/app.css" media="screen"/>
     <link rel="stylesheet" type="text/css" href="/resources/style/jquery-ui-1.10.4.custom.min.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="/resources/style/jquery.ui.timepicker.css" media="screen"/>
     <%--<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">--%>
     <script type="text/javascript" src="/resources/js/openlayers/OpenLayers.js"></script>
     <script type="text/javascript" src="/resources/js/heatmap/heatmap.js"></script>
     <script type="text/javascript" src="/resources/js/heatmap/heatmap-openlayers.js"></script>
     <script type="text/javascript" src="/resources/js/jquery/jquery-2.1.0.js"></script>
+    <script type="text/javascript" src="/resources/js/jquery/jquery.ui.timepicker.js"></script>
     <script type="text/javascript" src="/resources/js/jquery/jquery-ui-1.10.4.custom.min.js"></script>
     <script type="text/javascript">
         $(function () {
@@ -15,19 +17,23 @@
                 dateFormat: 'yy-mm-dd',
                 changeYear: true
             });
+
+            $('.timeChooser').timepicker({
+                showPeriodLabels: false
+            });
         });
 
         var map;
         var baseLayer;
         var currentHeatmap;
 
-
         function init() {
             map = new OpenLayers.Map('heatmapArea');
             baseLayer = new OpenLayers.Layer.OSM();
             map.addLayer(baseLayer);
             map.zoomToMaxExtent();
-        };
+        }
+        ;
 
         function addHeatMapLayer(signals) {
             //remove old heatmap layer
@@ -37,10 +43,10 @@
 
             //create data set
             var heatMapDataSet = { max: 90, data: [] };
-            for (var i=0; i<signals.length; i++) {
+            for (var i = 0; i < signals.length; i++) {
                 heatMapDataSet.data.push({
                     lonlat: new OpenLayers.LonLat(signals[i].longitude, signals[i].latitude),
-                    count: signals[i].strength+120
+                    count: signals[i].strength + 120
                 });
             }
 
@@ -75,17 +81,29 @@
     </script>
 </head>
 <body onload='init();'>
-<div class="inputArea">
-    <label>Start date:</label>
-    <input type="text" class="dateChooser" id="startdate"/>
+<%--<div class="main">--%>
+    <div class="inputArea">
+        <label>Input data: </label>
 
-    <p/>
-    <label>End date:</label>
-    <input type="text" class="dateChooser" id="enddate"/>
+        <label>Start date*:</label>
+        <input type="text" class="dateChooser" id="startdate"/>
 
-    <p/>
-    <input type="button" id="findButton" value="Find"/>
-</div>
-<div id="heatmapArea" class="heatmapArea"></div>
+        <label>Start time*:</label>
+        <input type="text" class="timeChooser" id="starttime">
+
+        <label>End date*:</label>
+        <input type="text" class="dateChooser" id="enddate"/>
+
+        <label>End time*:</label>
+        <input type="text" class="timeChooser" id="endtime">
+
+        <label>Device id:</label>
+        <input type="text" class="deviceChooser" id="deviceId">
+
+        <input type="button" id="findButton" value="Find"/>
+    </div>
+
+    <div id="heatmapArea" class="heatmapArea"></div>
+<%--</div>--%>
 </body>
 </html>

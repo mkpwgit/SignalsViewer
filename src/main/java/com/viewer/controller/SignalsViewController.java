@@ -1,12 +1,14 @@
 package com.viewer.controller;
 
 import com.viewer.domain.Signal;
+import com.viewer.service.SignalService;
 import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -22,20 +24,18 @@ import java.util.List;
 @Controller
 public class SignalsViewController {
 
+    @Resource
+    private SignalService signalService;
+
     @RequestMapping(method = RequestMethod.GET)
-    public String startPage(Model uiModel) {
-        return "test";
+    public String startPage() {
+        return "upload";
     }
 
     @RequestMapping(value = "/file", method = RequestMethod.POST)
     public String uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
-        if (!file.isEmpty()) {
-            List rows = IOUtils.readLines(file.getInputStream(), "UTF-8");
-            for (Object row: rows) {
-                System.out.println(row);
-            }
-        }
-        return "test6";
+        signalService.saveFile(file);
+        return "viewer";
     }
 
     @RequestMapping(value = "/{startdate:.+}/{enddate:.+}", method = RequestMethod.GET)
