@@ -12,6 +12,59 @@
     <script type="text/javascript" src="/resources/js/jquery/jquery.ui.timepicker.js"></script>
     <script type="text/javascript" src="/resources/js/jquery/jquery-ui-1.10.4.custom.min.js"></script>
     <script type="text/javascript">
+        var isErrorOccured = false;
+
+        $(document).ready(function () {
+            $('.error').hide();
+
+            var dateRegExp = /^\d\d\d\d\-\d\d\-\d\d$/;
+            var timeRegExp = /^\d\d\:\d\d$/;
+
+            $('#findButton').click(function (event) {
+                isErrorOccured = false;
+                var startDate = $("#startdate").val();
+                var startTime = $("#starttime").val();
+                var endDate = $("#enddate").val();
+                var endTime = $("#endtime").val();
+
+                validateField(startDate, dateRegExp, '#startDateId');
+                validateField(startTime, timeRegExp, '#startTimeId');
+                validateField(endDate, dateRegExp, '#endDateId');
+                validateField(endTime, timeRegExp, '#endTimeId');
+
+                if (!isErrorOccured) {
+                    var siteUrl = "/signalsviewer/";
+                    var timeEnding = ":00";
+                    var resultUrl = siteUrl + startDate + "T" + startTime + timeEnding + "/" +
+                            endDate + "T" + endTime + timeEnding;
+
+                    $.ajax({
+                        type: "GET",
+                        url: resultUrl,
+                        dataType: "json",
+                        success: function (signals) {
+                            addHeatMapLayer(signals);
+                        }
+                    });
+                }
+            });
+        });
+
+        function validateField(value, regExp, fieldId) {
+            if (validateWithReg(value, regExp)) {
+                $(fieldId).hide();
+            }
+            else {
+                $(fieldId).show();
+                isErrorOccured = true;
+            }
+        }
+
+        function validateWithReg(value, regexp) {
+            var dtRegex = new RegExp(regexp);
+            return dtRegex.test(value);
+        }
+
         $(function () {
             $('.dateChooser').datepicker({
                 dateFormat: 'yy-mm-dd',
@@ -21,6 +74,7 @@
             $('.timeChooser').timepicker({
                 showPeriodLabels: false
             });
+
         });
 
         var map;
@@ -57,53 +111,38 @@
             currentHeatmap.setDataSet(heatMapDataSet);
         }
 
-        $(function () {
-            var siteUrl = "http://localhost:8080/signalsviewer/";
-
-            $('#findButton').click(function () {
-                var startDate = $("#startdate").val();
-                var endDate = $("#enddate").val();
-                var resultUrl = siteUrl + startDate + "/" + endDate;
-
-                $.ajax({
-                    type: "GET",
-                    url: resultUrl,
-                    dataType: "json",
-                    success: function (signals) {
-                        addHeatMapLayer(signals);
-                    }
-                });
-
-            });
-
-        });
-
     </script>
 </head>
 <body onload='init();'>
-<%--<div class="main">--%>
-    <div class="inputArea">
-        <label>Input data: </label>
+<div class="inputArea">
+    <label>Input data: </label>
 
-        <label>Start date*:</label>
-        <input type="text" class="dateChooser" id="startdate"/>
+    <label>Start date*:</label>
+    <input type="text" class="dateChooser" id="startdate"/>
 
-        <label>Start time*:</label>
-        <input type="text" class="timeChooser" id="starttime">
+    <div class="error" id="startDateId">Invalid date</div>
 
-        <label>End date*:</label>
-        <input type="text" class="dateChooser" id="enddate"/>
+    <label>Start time*:</label>
+    <input type="text" class="timeChooser" id="starttime">
 
-        <label>End time*:</label>
-        <input type="text" class="timeChooser" id="endtime">
+    <div class="error" id="startTimeId">Invalid time</div>
 
-        <label>Device id:</label>
-        <input type="text" class="deviceChooser" id="deviceId">
+    <label>End date*:</label>
+    <input type="text" class="dateChooser" id="enddate"/>
 
-        <input type="button" id="findButton" value="Find"/>
-    </div>
+    <div class="error" id="endDateId">Invalid date</div>
 
-    <div id="heatmapArea" class="heatmapArea"></div>
-<%--</div>--%>
+    <label>End time*:</label>
+    <input type="text" class="timeChooser" id="endtime">
+
+    <div class="error" id="endTimeId">Invalid time</div>
+
+    <label>Device id:</label>
+    <input type="text" class="deviceChooser" id="deviceId">
+
+    <input type="button" id="findButton" value="Find"/>
+</div>
+
+<div id="heatmapArea" class="heatmapArea"></div>
 </body>
 </html>

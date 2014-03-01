@@ -12,7 +12,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static com.viewer.Constants.DATE_FORMAT;
@@ -35,12 +37,10 @@ public class SignalServiceImpl implements SignalService {
             if (!file.isEmpty()) {
                 List rows = IOUtils.readLines(file.getInputStream(), "UTF-8");
                 for (Object row : rows) {
-                    String [] rowParts = ((String) row).split(",");
-
-                    DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+                    String[] rowParts = ((String) row).split(",");
 
                     Signal signal = new Signal();
-                    signal.setDate(dateFormat.parse(rowParts[0].trim()));
+                    signal.setDate(parseDateFromString(rowParts[0].trim()));
                     signal.setDeviceId(Long.parseLong(rowParts[1].trim()));
                     signal.setLatitude(Double.parseDouble(rowParts[2].trim()));
                     signal.setLongitude(Double.parseDouble(rowParts[3].trim()));
@@ -52,6 +52,23 @@ public class SignalServiceImpl implements SignalService {
         } catch (Exception ex) {
             LOG.error("ERROR: ", ex);
             throw new ViewerException("Cannot read and save file!");
+        }
+    }
+
+    @Override
+    public List<Signal> getSignalsByDate(String startDateStr, String endDateStr) {
+        Date startDate = parseDateFromString(startDateStr);
+        Date endDate = parseDateFromString(endDateStr);
+        return signalRepository.getSignalsByDate(startDate, endDate);
+    }
+
+    private Date parseDateFromString(String date) {
+        try {
+            DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+            return dateFormat.parse(date);
+        } catch (ParseException ex) {
+            LOG.error("ERROR: ", ex);
+            throw new ViewerException("Cannot parse date from string");
         }
     }
 }

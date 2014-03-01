@@ -3,6 +3,8 @@ package com.viewer.controller;
 import com.viewer.domain.Signal;
 import com.viewer.service.SignalService;
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +26,8 @@ import java.util.List;
 @Controller
 public class SignalsViewController {
 
+    private static Logger LOG = LoggerFactory.getLogger(SignalsViewController.class);
+
     @Resource
     private SignalService signalService;
 
@@ -41,22 +45,12 @@ public class SignalsViewController {
     @RequestMapping(value = "/{startdate:.+}/{enddate:.+}", method = RequestMethod.GET)
     public @ResponseBody
     List<Signal> getSignalsForAllIds(@PathVariable String startdate, @PathVariable String enddate) throws ParseException {
-        System.out.println(startdate+" "+enddate);
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        /*DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
         Date startDate = dateFormat.parse(startdate);
         Date endDate = dateFormat.parse(enddate);
-        System.out.println(startDate + " !!! "+endDate);
+        LOG.info("Start date: "+startDate+" End date: "+endDate);*/
 
-        List<Signal> signals = new ArrayList<>();
-        Signal signal = new Signal();
-        signal.setDeviceId(1L);
-//        signal.setDate(startDate);
-        signal.setLatitude(12.34);
-        signal.setLongitude(15.67);
-        signal.setStrength(-40);
-
-        signals.add(signal);
-        signals.add(signal);
+        List<Signal> signals = signalService.getSignalsByDate(startdate, enddate);
 
         return signals;
     }
