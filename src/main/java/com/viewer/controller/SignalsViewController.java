@@ -20,9 +20,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by mikalai on 2/27/14.
- */
 @RequestMapping("/signalsviewer")
 @Controller
 public class SignalsViewController {

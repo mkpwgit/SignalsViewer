@@ -2,9 +2,6 @@ package com.viewer.domain;
 
 import java.util.Date;
 
-/**
- * Created by mikalai on 2/28/14.
- */
 public class Signal {
 
     private Long deviceId;

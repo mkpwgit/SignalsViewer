@@ -5,9 +5,6 @@ import com.viewer.domain.Signal;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by mikalai on 2/28/14.
- */
 public interface SignalRepository {
 
     public void save(Signal signal);

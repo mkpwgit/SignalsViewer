@@ -1,8 +1,5 @@
 package com.viewer;
 
-/**
- * Created by mikalai on 2/28/14.
- */
 public class Constants {
 
     //column names

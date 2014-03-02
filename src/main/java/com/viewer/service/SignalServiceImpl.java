@@ -19,9 +19,6 @@ import java.util.List;
 
 import static com.viewer.Constants.DATE_FORMAT;
 
-/**
- * Created by mikalai on 3/1/14.
- */
 @Service
 public class SignalServiceImpl implements SignalService {
 

@@ -21,9 +21,6 @@ import java.util.Map;
 
 import static com.viewer.Constants.*;
 
-/**
- * Created by mikalai on 2/28/14.
- */
 @Repository
 public class SignalRepositoryImpl implements SignalRepository {
 
@@ -35,7 +32,7 @@ public class SignalRepositoryImpl implements SignalRepository {
     private String findSignalsByDateAndDeviceIdQuery;
 
     /**
-     * Allowing the use of named parameters rather than traditional '?' placeholders.
+     * Allow using of named parameters rather than traditional '?' placeholders.
      */
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 

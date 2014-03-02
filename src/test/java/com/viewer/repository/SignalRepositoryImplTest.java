@@ -21,9 +21,6 @@ import java.util.List;
 import static com.viewer.Constants.DATE_FORMAT;
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by mikalai on 2/28/14.
- */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath*:com/viewer/configuration/spring/main-test-context.xml"})
 @Transactional
