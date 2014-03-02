@@ -2,7 +2,7 @@ html,body{ margin:0; padding:0; height:100%; width:100%; }
 
 .inputArea {
     float: left;
-    width: 17%;
+    width: 20%;
     height: 100%;
     display: inline-block;
     background:#f5f5f5;
@@ -43,7 +43,7 @@ input[type="button"]{
 }
 
 .heatmapArea {
-    width: 83%;
+    width: 80%;
     height: 99%;
     display: inline-block;
 }

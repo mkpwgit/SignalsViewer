@@ -1,1 +1,1 @@
-http://www.patrick-wied.at/static/heatmapjs/example-heatmap-openlayers.html
+http://env-2395286.j.rsnx.ru/signalsviewer/ - application address
