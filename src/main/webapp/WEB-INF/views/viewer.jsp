@@ -2,9 +2,11 @@
 <html lang="en">
 <head>
     <link rel="stylesheet" type="text/css" href="/resources/style/app.css" media="screen"/>
-    <link rel="stylesheet" type="text/css" href="/resources/style/jquery/jquery-ui-1.10.4.custom.min.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="/resources/style/jquery/jquery-ui-1.10.4.custom.min.css"
+          media="screen"/>
     <link rel="stylesheet" type="text/css" href="/resources/style/jquery/jquery.ui.timepicker.css" media="screen"/>
     <%--<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">--%>
+    <script type="text/javascript" src="/resources/js/app.js"></script>
     <script type="text/javascript" src="/resources/js/openlayers/OpenLayers.js"></script>
     <script type="text/javascript" src="/resources/js/heatmap/heatmap.js"></script>
     <script type="text/javascript" src="/resources/js/heatmap/heatmap-openlayers.js"></script>
@@ -13,14 +15,26 @@
     <script type="text/javascript" src="/resources/js/jquery/jquery-ui-1.10.4.custom.min.js"></script>
     <script type="text/javascript">
 
+        var map;
+        var baseLayer;
+        var currentHeatmap;
         var isErrorOccurred = false;
 
         $(document).ready(function () {
+
+            //show map
+            map = new OpenLayers.Map('heatmapArea');
+            baseLayer = new OpenLayers.Layer.OSM();
+            map.addLayer(baseLayer);
+            map.zoomToMaxExtent();
+
+            //hide error messages
             $('.error').hide();
 
             var dateRegExp = /^\d\d\d\d\-\d\d\-\d\d$/;
             var timeRegExp = /^\d\d\:\d\d$/;
 
+            //send ajax request if validation was successful
             $('#findButton').click(function (event) {
                 isErrorOccurred = false;
 
@@ -99,18 +113,6 @@
 
         });
 
-        var map;
-        var baseLayer;
-        var currentHeatmap;
-
-        function init() {
-            map = new OpenLayers.Map('heatmapArea');
-            baseLayer = new OpenLayers.Layer.OSM();
-            map.addLayer(baseLayer);
-            map.zoomToMaxExtent();
-        }
-        ;
-
         function addHeatMapLayer(signals) {
             //remove old heatmap layer
             if (currentHeatmap != null) {
@@ -142,23 +144,28 @@
 
     <label>Start date*:</label>
     <input type="text" class="dateChooser" id="startdate"/>
-    <div class="error" id="startDateId">Invalid date</div>
+
+    <div class="error" id="startDateId">Invalid date. Should be in format yyyy-mm-dd.</div>
 
     <label>Start time*:</label>
     <input type="text" class="timeChooser" id="starttime">
-    <div class="error" id="startTimeId">Invalid time</div>
+
+    <div class="error" id="startTimeId">Invalid time. Should be in format hh:mm.</div>
 
     <label>End date*:</label>
     <input type="text" class="dateChooser" id="enddate"/>
-    <div class="error" id="endDateId">Invalid date</div>
+
+    <div class="error" id="endDateId">Invalid date. Should be in format yyyy-mm-dd.</div>
 
     <label>End time*:</label>
     <input type="text" class="timeChooser" id="endtime">
-    <div class="error" id="endTimeId">Invalid time</div>
+
+    <div class="error" id="endTimeId">Invalid time. Should be in format hh:mm.</div>
 
     <label>Device id:</label>
     <input type="text" class="deviceChooser" id="deviceId">
-    <div class="error" id="deviceIdError">Invalid number</div>
+
+    <div class="error" id="deviceIdError">Invalid number.</div>
 
     <input type="button" id="findButton" value="Find"/>
 
