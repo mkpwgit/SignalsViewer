@@ -6,7 +6,6 @@
           media="screen"/>
     <link rel="stylesheet" type="text/css" href="/resources/style/jquery/jquery.ui.timepicker.css" media="screen"/>
     <%--<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">--%>
-    <script type="text/javascript" src="/resources/js/app.js"></script>
     <script type="text/javascript" src="/resources/js/openlayers/OpenLayers.js"></script>
     <script type="text/javascript" src="/resources/js/heatmap/heatmap.js"></script>
     <script type="text/javascript" src="/resources/js/heatmap/heatmap-openlayers.js"></script>
@@ -138,7 +137,7 @@
     </script>
     <title>Viewer</title>
 </head>
-<body onload='init();'>
+<body>
 <div class="inputArea">
     <label>Input data: </label>
 
