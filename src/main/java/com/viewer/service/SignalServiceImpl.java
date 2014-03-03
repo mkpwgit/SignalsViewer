@@ -43,7 +43,8 @@ public class SignalServiceImpl implements SignalService {
                     signal.setLongitude(Double.parseDouble(rowParts[3].trim()));
                     signal.setStrength(Integer.parseInt(rowParts[4].trim()));
 
-                    signalRepository.save(signal);
+                    if (simpleValidation(signal))
+                        signalRepository.save(signal);
                 }
             }
         } catch (Exception ex) {
@@ -74,5 +75,24 @@ public class SignalServiceImpl implements SignalService {
             LOG.error("ERROR: ", ex);
             throw new ViewerException("Cannot parse date from string");
         }
+    }
+
+    /**
+     * Validate signal. If validation is successful return true.
+     *
+     * @param signal Object that is validated
+     * @return true if validation was successful
+     */
+    private boolean simpleValidation(Signal signal) {
+        Double latitude = signal.getLatitude();
+        Double longitude = signal.getLongitude();
+        Integer strength = signal.getStrength();
+        if (latitude < -90 || latitude> 90)
+            return false;
+        if (longitude < -180 || longitude > 180)
+            return false;
+        if (strength < -120 || strength > - 30)
+            return false;
+        return true;
     }
 }
